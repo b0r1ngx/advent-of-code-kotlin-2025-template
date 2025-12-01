@@ -13,7 +13,6 @@ fun getSecretEntrancePasswordPartTwo(data: List<String>): Int {
             currentPointer = it.first
             pointAtZeroCounter = it.second
         }
-        if (currentPointer == 0) pointAtZeroCounter++
     }
 
     return pointAtZeroCounter
