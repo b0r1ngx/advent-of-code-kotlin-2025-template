@@ -4,39 +4,30 @@ import kotlin.collections.first
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 
+private var pointAtZeroCounter = 0
+
 fun getSecretEntrancePasswordPartTwo(data: List<String>): Int {
     var currentPointer = START_POINT
-    var pointAtZeroCounter = 0 // password
 
     data.forEach { rotation ->
-        currentPointer.pointAfterRotation(rotation, pointAtZeroCounter).also {
-            currentPointer = it.first
-            pointAtZeroCounter = it.second
-        }
+        currentPointer = currentPointer.pointAfterRotation(rotation)
     }
 
     return pointAtZeroCounter
 }
 
-private fun Int.pointAfterRotation(rotation: String, globalCounter: Int): Pair<Int, Int> {
+private fun Int.pointAfterRotation(rotation: String): Int {
     val direction = rotation[0]
     val amount = rotation.drop(1).toInt()
 
     var newPoint: Int
-    var _globalCounter = globalCounter
     when (direction) {
-        'L' -> DIAL.rotateLeftPartTwo(this, amount, globalCounter).also {
-            newPoint = it.first
-            _globalCounter = it.second
-        }
-        'R' -> DIAL.rotateRightPartTwo(this, amount, globalCounter).also {
-            newPoint = it.first
-            _globalCounter = it.second
-        }
+        'L' -> newPoint = DIAL.rotateLeftPartTwo(this, amount)
+        'R' -> newPoint = DIAL.rotateRightPartTwo(this, amount)
         else -> newPoint = 0
     }
 
-    return newPoint to _globalCounter
+    return newPoint
 }
 
 // for sorted lists (dial)
@@ -45,43 +36,39 @@ private fun Int.pointAfterRotation(rotation: String, globalCounter: Int): Pair<I
 fun List<Int>.rotateLeftPartTwo(
     from: Int, // 5
     amount: Int, // 10
-    globalCounter: Int,
-): Pair<Int, Int> {
+): Int {
     val min = this.first() // 0
     val max = this.last() // 99
 
     var currentPointer = from // 5
-    var _globalCounter = globalCounter
     for (i in 0 until amount) {
         if (currentPointer == min) {
             currentPointer = max + 1
-            _globalCounter++
+            pointAtZeroCounter++
         }
         currentPointer--
     }
 
-    return currentPointer to _globalCounter
+    return currentPointer
 }
 
 fun List<Int>.rotateRightPartTwo(
     from: Int, // 95
     amount: Int, // 10
-    globalCounter: Int,
-): Pair<Int, Int> {
+): Int {
     val min = this.first() // 0
     val max = this.last() // 99
 
     var currentPointer = from // 95
-    var _globalCounter = globalCounter
     for (i in 0 until amount) {
         if (currentPointer == max) {
             currentPointer = min - 1
-            _globalCounter++
+            pointAtZeroCounter++
         }
         currentPointer++
     }
 
-    return currentPointer to _globalCounter
+    return currentPointer
 }
 
 fun main() {
