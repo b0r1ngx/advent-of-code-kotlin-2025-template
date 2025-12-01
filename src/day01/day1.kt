@@ -4,9 +4,6 @@ import kotlin.collections.first
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 
-val DIAL: List<Int> = List(100) { i -> i }
-const val START_POINT = 50
-
 fun getSecretEntrancePassword(data: List<String>): Int {
     var currentPointer = START_POINT
     var pointAtZeroCounter = 0 // password
