@@ -5,7 +5,7 @@ import kotlin.io.path.readText
 
 const val IS_SHOW_LOG = false
 
-val directions = listOf(
+val ADJACENT_POSITIONS = listOf(
     (-1 to -1), (-1 to 0), (-1 to 1),
     (0 to -1),            (0 to 1),
     (1 to -1), (1 to 0), (1 to 1)
@@ -30,7 +30,7 @@ fun printingDepartment(papersGrid: List<String>): Int {
 
 fun countAdjacentPapers(rowIndex: Int, columnIndex: Int, papersGrid: List<String>): Int {
     var papersCounter = 0
-    for (direction in directions) {
+    for (direction in ADJACENT_POSITIONS) {
         val rowIndex = rowIndex + direction.first
         val columnIndex = columnIndex + direction.second
 
