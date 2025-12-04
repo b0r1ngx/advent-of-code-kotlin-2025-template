@@ -42,11 +42,9 @@ fun List<Int>.rotateLeftPartTwo(
 
     var currentPointer = from // 5
     for (i in 0 until amount) {
-        if (currentPointer == min) {
-            currentPointer = max + 1
-            pointAtZeroCounter++
-        }
         currentPointer--
+        if (currentPointer < min) currentPointer = max
+        if (currentPointer == 0) pointAtZeroCounter++
     }
 
     return currentPointer
@@ -61,18 +59,34 @@ fun List<Int>.rotateRightPartTwo(
 
     var currentPointer = from // 95
     for (i in 0 until amount) {
-        if (currentPointer == max) {
-            currentPointer = min - 1
-            pointAtZeroCounter++
-        }
         currentPointer++
+        if (currentPointer > max) currentPointer = min
+        if (currentPointer == 0) pointAtZeroCounter++
     }
 
     return currentPointer
 }
 
+fun solutionFromStream(data: List<String>): Int {
+    var currentPointer = START_POINT
+
+    data.forEach { rotation ->
+        val direction = if (rotation[0] == 'L') - 1 else 1
+        val amount = rotation.drop(1).toInt()
+
+        repeat(amount) {
+            currentPointer = (currentPointer + direction) % 100
+            if (currentPointer == 0) pointAtZeroCounter++
+        }
+    }
+
+    return pointAtZeroCounter
+}
+
 fun main() {
     val data = Path("src/day01/input.txt").readText().trim().lines()
     val password = getSecretEntrancePasswordPartTwo(data)
-    println("Password: $password")
+    pointAtZeroCounter = 0
+    check(password == solutionFromStream(data))
+    println("password: $password")
 }
