@@ -8,8 +8,9 @@ fun findLargestRectangleOfTwoCorners(redTilesOnTheFloor: List<String>): Long {
     var largestRectangle = 0L
 
     redTilesOnTheFloor.forEach { i ->
+        val iTile = i.split(',').map { it.toLong() }
+
         redTilesOnTheFloor.forEach { j ->
-            val iTile = i.split(',').map { it.toLong() }
             val jTile = j.split(',').map { it.toLong() }
             val currentRectangle = (abs(jTile.first() - iTile.first()) + 1) * (abs(jTile.last() - iTile.last()) + 1)
             if (currentRectangle > largestRectangle)
@@ -33,7 +34,7 @@ fun main() {
     """.trim().lines()
     // visualizer
     // # - red, . - empty
-    // ..............
+    //..............
     //.......#...#..
     //..............
     //..#....#......
