@@ -4,15 +4,20 @@ import kotlin.io.path.Path
 import kotlin.io.path.readText
 import kotlin.math.abs
 
+data class Tile(val x: Long, val y: Long)
+
 fun findLargestRectangleOfTwoCorners(redTilesOnTheFloor: List<String>): Long {
     var largestRectangle = 0L
 
-    redTilesOnTheFloor.forEach { i ->
-        val iTile = i.split(',').map { it.toLong() }
+    redTilesOnTheFloor.forEachIndexed { tileIndex, tilePosition ->
+        val (iTileX, iTileY) = tilePosition.split(',').map { it.toLong() }
+        val iTile = Tile(iTileX, iTileY)
 
-        redTilesOnTheFloor.forEach { j ->
-            val jTile = j.split(',').map { it.toLong() }
-            val currentRectangle = (abs(jTile.first() - iTile.first()) + 1) * (abs(jTile.last() - iTile.last()) + 1)
+        for (j in tileIndex + 1 until redTilesOnTheFloor.size) {
+            val (jTileX, jTileY) = redTilesOnTheFloor[j].split(',').map { it.toLong() }
+            val jTile = Tile(jTileX, jTileY)
+
+            val currentRectangle = (abs(jTile.x - iTile.x) + 1) * (abs(jTile.y - iTile.y) + 1)
             if (currentRectangle > largestRectangle)
                 largestRectangle = currentRectangle
         }
