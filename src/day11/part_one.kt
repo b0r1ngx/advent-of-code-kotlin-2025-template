@@ -3,7 +3,7 @@ package day11
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 
-fun countPathsFromYouToOut(paths: List<String>): Int {
+fun countPaths(from: String, to: String, paths: List<String>): Int {
     val pathMap = mutableMapOf<String, List<String>>()
     paths.forEach { rawPath ->
         val (path, rawLeadingToPaths) = rawPath.split(": ")
@@ -14,7 +14,7 @@ fun countPathsFromYouToOut(paths: List<String>): Int {
     var pathsToOut = mutableListOf<String>()
     var countPathsToOut = 0
     // listOf(bbb, ccc)
-    pathsToOut.addAll(pathMap["you"]!!)
+    pathsToOut.addAll(pathMap[from]!!)
     while (pathsToOut.isNotEmpty()) {
         val _possiblePaths = mutableListOf<String>()
         _possiblePaths.addAll( pathsToOut)
@@ -23,7 +23,7 @@ fun countPathsFromYouToOut(paths: List<String>): Int {
             // ccc -> ddd, eee, fff
             val path = pathsToOut.removeFirst()
             val nextPaths = pathMap[path]!!
-            if (nextPaths.contains("out")) {
+            if (nextPaths.contains(to)) {
                 countPathsToOut++
             } else {
                 pathsToOut.addAll(nextPaths)
@@ -49,6 +49,6 @@ iii: out""".trim().lines()
 
     val individualInput = Path("src/day11/input.txt").readText().trim().lines()
 
-    val countPaths = countPathsFromYouToOut(individualInput)
+    val countPaths = countPaths(from = "you", to = "out", paths = individualInput)
     println(countPaths)
 }
