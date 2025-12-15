@@ -11,7 +11,7 @@ fun countPaths(from: String, to: String, paths: List<String>): Int {
         pathMap[path] = leadingToPaths
     }
 
-    var pathsToOut = mutableListOf<String>()
+    val pathsToOut = mutableListOf<String>()
     var countPathsToOut = 0
     // listOf(bbb, ccc)
     pathsToOut.addAll(pathMap[from]!!)
