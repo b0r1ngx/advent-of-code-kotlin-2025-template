@@ -1,10 +1,30 @@
 package day12
 
 data class Grid(val width: Int, val height: Int) {
+    val field = List(height) { BooleanArray(width) }
+
     fun size() = width * height
+
+    fun addPresent() {
+
+    }
+
+    fun removePresent() {
+
+    }
 }
 
-data class Present(val shape: List<Int>, val size: Int)
+data class Present(val shape: List<Point>, val size: Int) {
+    val variants = getUniqueRotatedAndFlippedVariants()
+
+    private fun getUniqueRotatedAndFlippedVariants(): List<Present> {
+        val variants = mutableListOf<Present>()
+        // TODO: Implement
+        return variants
+    }
+}
+
+data class Point(val x: Int, val y: Int)
 
 enum class FitStatus {
     CANT_FIT, FITS_AS_IS, NEED_TO_DETERMINE
@@ -59,13 +79,18 @@ fun parseInput(input: List<String>): Pair<Map<Int, Present>, List<Pair<Grid, Lis
     val rawPresents = input.take(firstGridLineIndex)
     val rawGridsUnderTrees = input.drop(firstGridLineIndex)
 
-    // TODO: need to decide, what is more convenient, to
-    //  shape is list of list?: ((1, 1, 1), (0, ..), ..)
-    //  or just list?: (1, 1, 1, 0, ..)
-    //  or: listOf(###, ##., ##.)
     val presents = parsePresents(rawPresents).mapValues {
-        val shape = it.value.flatMap { it.map { chart -> if (chart == '#') 1 else 0 } }
-        Present(shape = shape, size = shape.sum())
+        val shape = mutableListOf<Point>()
+        for (indexOfRow in 0 until it.value.size) {
+            val row = it.value[indexOfRow]
+            for (indexOfColumn in 0 until row.length) {
+                val char = row[indexOfColumn]
+                if (char == '#') {
+                    shape.add(Point(indexOfColumn, indexOfRow))
+                }
+            }
+        }
+        Present(shape = shape, size = shape.size)
     }
     val grid = parseGrids(rawGridsUnderTrees)
     return presents to grid
@@ -94,7 +119,7 @@ fun parseGrids(input: List<String>): List<Pair<Grid, List<Int>>> =
             Grid(width, height) to amountOfPresentsOfEachIndex
         }
 
-fun main(args: Array<String>) {
+fun main() {
     val exampleInput = """
 0:
 ###
@@ -133,7 +158,6 @@ fun main(args: Array<String>) {
 
 //    val individualInput = Path("src/day12/input.txt").readText().trim().lines()
 
-    val a = parseInput(exampleInput)
     val countPaths = countPresentsFitUnderTrees(exampleInput)
     println(countPaths)
 }
